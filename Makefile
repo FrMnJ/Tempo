@@ -1,16 +1,16 @@
-./bin/tempo.exe: ./src/main.c ./src/cycle.c ./src/phase.c
+./bin/tempo: ./src/main.c ./src/cycle.c ./src/phase.c
 	cc -std=c99 -Wall -Iinclude \
 	   ./src/main.c ./src/cycle.c ./src/phase.c \
-	   -o ./bin/tempo.exe -g
+	   -o ./bin/tempo
 
 
 build: ./src/main.c ./src/cycle.c ./src/phase.c
 	cc -std=c99 -Wall -Iinclude \
 	   ./src/main.c ./src/cycle.c ./src/phase.c \
-	   -o ./bin/tempo.exe -g
+	   -o ./bin/tempo
 
-run: ./bin/tempo.exe
-	./bin/tempo.exe
+run: ./bin/tempo
+	./bin/tempo
 
 clean:
 	del /Q .\bin\tempo.exe 2>nul || exit 0
