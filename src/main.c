@@ -42,6 +42,18 @@ int main(int argc, char** argv)
     if(times < 1) return INVALID_TIMES_CYCLE_ERR;
     while(getchar() != '\n');
     my_cycle->times = times;
+    int waitfor;
+    printf("Enter how much time I need to wait for the start: ");
+    scanf("%d", &waitfor);
+    while(getchar() != '\n');
+    if(waitfor < 0) waitfor = 5;
+    #ifdef _WIN32
+        Sleep(waitfor*1000);
+        Beep(750, 1000);
+    #else
+        sleep(waitfor);
+        printf("\a");
+    #endif
     while(my_cycle->current){
         printf("Phase: %s\n", my_cycle->current->name);
         printf("Time in seconds: %d\n", my_cycle->current->seconds);
@@ -55,5 +67,12 @@ int main(int argc, char** argv)
         next_phase(my_cycle);
     }
     del_cycle(my_cycle);
+    #ifdef _WIN32
+        Beep(750, 1500);
+    #else
+        printf("\a");
+        printf("\a");
+    #endif
+    printf("END\n");
     return 0;
 }
