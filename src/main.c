@@ -1,0 +1,56 @@
+#include <stdio.h>
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
+#include "tempo_errors.h"
+#include "cycle.h"
+
+static char input[2048];
+
+int main(int argc, char** argv)
+{
+    int phases;
+    printf("How many phases do you want? ");
+    scanf("%d", &phases);
+    while(getchar() != '\n');
+    cycle_t* my_cycle = make_cycle();
+    if(!my_cycle){
+        return CYCLE_MEM_ERR;
+    }
+    for(int i = 0; i < phases; i++){
+        printf("Name phase %d? ",(i+1));
+        fgets(input, 2048, stdin);
+
+        int seconds;
+        printf("Duration of phase in seconds? ");
+        scanf("%i", &seconds);
+        while(getchar() != '\n');
+        input[(strlen(input)-1)] = '\0';
+        phase_t* new_phase = make_phase(input, seconds);
+        if(!new_phase){
+            return PHASE_MEM_ERR;
+        }
+        cycle_add_phase(my_cycle, new_phase);
+    }
+    int times;
+    printf("How many times will you repeat the cycle? ");
+    scanf("%i", &times);
+    while(getchar() != '\n');
+    my_cycle->times = times;
+    while(my_cycle->current){
+        printf("Phase: %s\n", my_cycle->current->name);
+        printf("Time in seconds: %d\n", my_cycle->current->seconds);
+        #ifdef _WIN32
+            Sleep(my_cycle->current->seconds*1000);
+            Beep(750, 500);
+        #else
+            sleep(my_cycle->current->seconds);
+            printf("\a");
+        #endif
+        next_phase(my_cycle);
+    }
+    del_cycle(my_cycle);
+    return 0;
+}
