@@ -12,20 +12,22 @@ static char input[2048];
 int main(int argc, char** argv)
 {
     int phases;
-    printf("How many phases do you want? ");
+    printf("Enter the number of phases in your cycle: ");
     scanf("%d", &phases);
+    if(phases < 1) return INVALID_NUM_PHASES_ERR;
     while(getchar() != '\n');
     cycle_t* my_cycle = make_cycle();
     if(!my_cycle){
         return CYCLE_MEM_ERR;
     }
     for(int i = 0; i < phases; i++){
-        printf("Name phase %d? ",(i+1));
+        printf("Enter a name for phase %d: ",(i+1));
         fgets(input, 2048, stdin);
 
         int seconds;
-        printf("Duration of phase in seconds? ");
+        printf("Enter the duration of this phase in seconds (positive integer): ");
         scanf("%i", &seconds);
+        if(seconds < 1) return INVALID_DUR_ERR;
         while(getchar() != '\n');
         input[(strlen(input)-1)] = '\0';
         phase_t* new_phase = make_phase(input, seconds);
@@ -35,8 +37,9 @@ int main(int argc, char** argv)
         cycle_add_phase(my_cycle, new_phase);
     }
     int times;
-    printf("How many times will you repeat the cycle? ");
+    printf("Enter how many times the entire cycle should repeat: ");
     scanf("%i", &times);
+    if(times < 1) return INVALID_TIMES_CYCLE_ERR;
     while(getchar() != '\n');
     my_cycle->times = times;
     while(my_cycle->current){

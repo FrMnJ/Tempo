@@ -4,6 +4,9 @@
 enum TempoErrors{
     CYCLE_MEM_ERR = 1,
     PHASE_MEM_ERR,
+    INVALID_NUM_PHASES_ERR,
+    INVALID_DUR_ERR,
+    INVALID_TIMES_CYCLE_ERR
 };
 
 #endif
